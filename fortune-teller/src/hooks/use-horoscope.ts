@@ -16,7 +16,7 @@ export interface HoroscopeResponse {
 export function useHoroscope() {
   return useMutation({
     mutationFn: async (sign: string): Promise<HoroscopeResponse> => {
-      const res = await fetch("https://falcizade-backend.onrender.com/api/horoscope", {
+      const res = await fetch("/api/horoscope", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ sign, userId: getOrCreateUserId() }),

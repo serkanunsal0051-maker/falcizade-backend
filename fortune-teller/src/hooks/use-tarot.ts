@@ -15,7 +15,7 @@ export interface TarotResponse {
 export function useTarot() {
   return useMutation({
     mutationFn: async (): Promise<TarotResponse> => {
-      const res = await fetch("https://falcizade-backend.onrender.com/api/tarot", {
+      const res = await fetch("/api/tarot", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ userId: getOrCreateUserId() }),

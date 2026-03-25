@@ -30,7 +30,7 @@ export function useFortune() {
       if (name)   formData.append("name",   name);
       if (gender) formData.append("gender", gender);
 
-      const res = await fetch("https://falcizade-backend.onrender.com/api/fal", {
+      const res = await fetch("/api/fal", {
         method: "POST",
         body: formData,
       });

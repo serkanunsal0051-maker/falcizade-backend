@@ -24,7 +24,7 @@ export function usePalm() {
       formData.append("image", image);
       formData.append("userId", getOrCreateUserId());
 
-      const res = await fetch("https://falcizade-backend.onrender.com/api/palm", {
+      const res = await fetch("/api/palm", {
         method: "POST",
         body: formData,
       });
