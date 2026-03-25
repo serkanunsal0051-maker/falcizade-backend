@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+    <title>Coffee Fortune Teller</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Privacy page: intercept before React mounts so it works in any context -->
+    <script>
+      (function () {
+        var path = window.location.pathname.replace(/\/$/, "");
+        if (path !== "/privacy") return;
+
+        document.title = "Privacy Policy";
+
+        document.addEventListener("DOMContentLoaded", function () {
+          var root = document.getElementById("root");
+          if (!root) return;
+
+          root.innerHTML = "";
+          root.removeAttribute("id"); // prevent React from mounting into this node
+
+          var page = document.createElement("div");
+          page.style.cssText = [
+            "min-height:100vh",
+            "background:linear-gradient(170deg,#1c0840 0%,#150930 30%,#0e0622 60%,#090318 100%)",
+            "display:flex",
+            "flex-direction:column",
+            "align-items:center",
+            "padding:48px 24px 64px",
+            "font-family:Inter,system-ui,sans-serif",
+            "box-sizing:border-box",
+          ].join(";");
+
+          page.innerHTML = [
+            '<div style="width:100%;max-width:480px">',
+
+            '  <h1 style="font-size:22px;font-weight:700;letter-spacing:0.12em;',
+            '              text-transform:uppercase;color:#fbbf24;',
+            '              text-shadow:0 0 24px rgba(251,191,36,0.55);',
+            '              margin-bottom:8px;text-align:center">',
+            "    Privacy Policy",
+            "  </h1>",
+
+            '  <div style="width:80px;height:1px;',
+            '               background:linear-gradient(90deg,transparent,rgba(251,191,36,.5),transparent);',
+            '               margin:0 auto 32px">',
+            "  </div>",
+
+            '  <div style="background:linear-gradient(145deg,rgba(34,10,72,.92),rgba(20,6,44,.88));',
+            '               border:1px solid rgba(251,191,36,.28);border-radius:20px;',
+            '               padding:28px 24px;',
+            '               box-shadow:0 0 32px rgba(109,40,217,.2),0 8px 28px rgba(0,0,0,.55)">',
+
+            '    <div style="height:1px;',
+            '                 background:linear-gradient(90deg,transparent,rgba(251,191,36,.4),transparent);',
+            '                 margin-bottom:20px">',
+            "    </div>",
+
+            '    <p style="color:rgba(255,255,255,.80);line-height:1.75;font-size:14px;margin:0 0 16px">',
+            '      This application uses <strong style="color:#fbbf24">Google AdMob</strong> to display ads.',
+            '      AdMob may collect device identifiers and usage data to provide personalized ads.',
+            "    </p>",
+
+            '    <p style="color:rgba(255,255,255,.80);line-height:1.75;font-size:14px;margin:0 0 16px">',
+            "      This app does not collect or store personal user data.",
+            "    </p>",
+
+            '    <p style="color:rgba(255,255,255,.80);line-height:1.75;font-size:14px;margin:0 0 24px">',
+            '      <strong style="color:#fbbf24">Google Privacy Policy:</strong>',
+            '      <a href="https://policies.google.com/privacy"',
+            '         target="_blank" rel="noopener noreferrer"',
+            '         style="color:#a78bfa;text-decoration:underline;word-break:break-all">',
+            "        https://policies.google.com/privacy",
+            "      </a>",
+            "    </p>",
+
+            '    <div style="height:1px;',
+            '                 background:linear-gradient(90deg,transparent,rgba(251,191,36,.2),transparent)">',
+            "    </div>",
+
+            "  </div>",
+            "</div>",
+          ].join("\n");
+
+          document.body.appendChild(page);
+
+          // Block React module from mounting
+          var scripts = document.querySelectorAll('script[type="module"]');
+          scripts.forEach(function (s) { s.remove(); });
+        });
+      })();
+    </script>
+    <script type="module" crossorigin src="/assets/index-DRd3GB-u.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index--cL5ZZ1x.css">
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>
