@@ -1,5 +1,5 @@
-import { db } from "@workspace/db";
-import { fortunePool, fortuneUserRequests, fortuneUserSeen } from "@workspace/db";
+import { db } from "./db";
+import { fortunePool, fortuneUserRequests, fortuneUserSeen } from "./db";
 import { and, eq, isNull, sql } from "drizzle-orm";
 
 export type FortuneType = "coffee" | "tarot" | "palm" | "horoscope";

@@ -1,5 +1,5 @@
 import { Router, type IRouter, type Request, type Response } from "express";
-import { openai } from "@workspace/integrations-openai-ai-server";
+import { openai } from "../lib/integrations-openai";
 import { hybridFortune } from "../lib/fortune-hybrid";
 
 const router: IRouter = Router();

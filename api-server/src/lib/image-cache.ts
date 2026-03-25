@@ -1,5 +1,5 @@
 import crypto from "crypto";
-import { db, imageFortunes } from "@workspace/db";
+import { db, imageFortunes } from "./db";
 import { and, eq } from "drizzle-orm";
 
 export type ImageFortuneType = "coffee" | "palm";
