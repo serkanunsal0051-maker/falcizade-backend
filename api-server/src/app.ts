@@ -10,27 +10,14 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// ✅ ANA TEST ENDPOINT (GET HATASI İÇİN)
-app.get("/", (req, res) => {
-  res.send("Falcızade API çalışıyor 🚀");
-});
-
-// ✅ /api/fal GET TEST (Tarayıcı hatası çözümü)
-app.get("/api/fal", (req, res) => {
-  res.json({
-    message: "Burası POST endpoint. GET yerine POST kullan 👍",
-  });
-});
-
-// API ROUTES (ASIL SİSTEM)
+// ✅ API ROUTES (ÖNCE!)
 app.use("/api", router);
 
-// Serve static files from the React app build directory
-app.use(express.static(path.join(process.cwd(), "dist")));
+// ✅ FRONTEND SERVE (TEK YER!)
+app.use(express.static(path.join(process.cwd(), "public")));
 
-// Catch all handler: send back React's index.html file for SPA routing
 app.get("*", (req, res) => {
-  res.sendFile(path.join(process.cwd(), "dist", "index.html"));
+  res.sendFile(path.join(process.cwd(), "public", "index.html"));
 });
 
 export default app;
