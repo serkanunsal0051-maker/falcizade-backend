@@ -1,0 +1,88 @@
+Improve the UI of the Falcizade fortune telling mobile web app by implementing a premium "Mystic Aura" design system.
+
+The app is used inside an Android WebView, so the design must be optimized for mobile screens.
+
+Goals:
+Create a mystical, premium, modern fortune-telling interface similar in quality to apps like Nebula Astrology, Co–Star and Faladdin.
+
+Do NOT change the app logic or functionality.
+Only improve visual design (HTML/CSS/JS).
+
+Design System: "Mystic Aura UI"
+
+1. Background Atmosphere
+   Replace the static background with a mystical animated gradient and soft moving mist.
+
+Background colors:
+deep purple (#1a0033)
+violet (#3b0066)
+dark blue (#0d0d2b)
+
+Add subtle animated fog or mist using CSS animations so the background slowly moves and feels magical.
+
+2. Fortune Circle Aura
+   The main fortune-telling circle should emit a soft glowing aura.
+
+Add:
+
+* radial glow
+* animated light pulse
+* soft purple/pink aura
+
+Example effect:
+box-shadow with animated glow pulse.
+
+3. Energy Ripple Interaction
+   When the user taps the fortune circle, create an energy ripple effect from the touch point.
+
+The ripple should:
+
+* expand outward
+* fade smoothly
+* use purple / pink light color
+
+Implement with JavaScript and CSS animation.
+
+4. Premium Buttons
+   Upgrade all buttons to look premium.
+
+Use gradient buttons such as:
+gold → orange
+or
+purple → pink
+
+Add:
+soft shadow
+glow on hover
+press animation (scale 0.97)
+
+Premium buttons should have a golden glow to indicate special features.
+
+5. Glassmorphism Cards
+   Convert sections of the UI into glass-style cards.
+
+Use:
+backdrop-filter: blur(10px)
+semi-transparent dark background
+thin glowing border
+
+6. Light Focus
+   Add a subtle radial light behind the main fortune circle so it becomes the visual focus of the screen.
+
+7. Smooth Micro Animations
+   Add small smooth animations to improve the premium feel:
+   fade-in elements
+   glow pulses
+   soft transitions
+
+Animation speed should be subtle and not distracting.
+
+8. Mobile Optimization
+   Everything must look clear and bright on mobile screens.
+
+Ensure:
+good contrast
+touch-friendly button sizes
+no heavy animations that reduce performance.
+
+The final UI should feel mystical, magical, premium and modern, like a professional fortune telling mobile app.

@@ -1,0 +1,116 @@
+openapi: 3.1.0
+info:
+  title: Api
+  version: 0.1.0
+  description: API specification
+servers:
+  - url: /api
+    description: Base API path
+tags:
+  - name: health
+    description: Health operations
+  - name: fortune
+    description: Fortune telling operations
+paths:
+  /healthz:
+    get:
+      operationId: healthCheck
+      tags: [health]
+      summary: Health check
+      description: Returns server health status
+      responses:
+        "200":
+          description: Healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthStatus"
+  /fal:
+    post:
+      operationId: generateFortune
+      tags: [fortune]
+      summary: Analyze a coffee cup photo and generate a fortune
+      description: Accepts an image upload of a coffee cup and returns a mystical fortune interpretation using AI vision
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                image:
+                  type: string
+                  format: binary
+                  description: Photo of the coffee cup
+              required:
+                - image
+      responses:
+        "200":
+          description: Fortune generated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FortuneResponse"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+components:
+  schemas:
+    HealthStatus:
+      type: object
+      properties:
+        status:
+          type: string
+      required:
+        - status
+    FortuneSections:
+      type: object
+      properties:
+        genel:
+          type: string
+          description: General overview reading
+        ask:
+          type: string
+          description: Love and relationships reading
+        para:
+          type: string
+          description: Money and career reading
+        yol:
+          type: string
+          description: Path and journey reading
+        saglik:
+          type: string
+          description: Health reading
+      required:
+        - genel
+        - ask
+        - para
+        - yol
+        - saglik
+    FortuneResponse:
+      type: object
+      properties:
+        title:
+          type: string
+          description: A short mystical title for this fortune reading
+        sections:
+          $ref: "#/components/schemas/FortuneSections"
+      required:
+        - title
+        - sections
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+      required:
+        - error

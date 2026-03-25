@@ -1,0 +1,141 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500&display=swap');
+@import "tailwindcss";
+
+@theme inline {
+  --font-sans: 'Inter', sans-serif;
+  --font-serif: 'Cormorant Garamond', serif;
+  --font-display: 'Cinzel', serif;
+
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  
+  --color-border: hsl(var(--border));
+  --color-ring: hsl(var(--ring));
+  
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+
+  --animate-spin-slow: spin 8s linear infinite;
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-pulse-gold: pulse-gold 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+:root {
+  /* Mystical Dark Ottoman Theme */
+  --background: 270 50% 6%;      /* Deep midnight purple */
+  --foreground: 45 40% 90%;      /* Soft golden off-white */
+  
+  --primary: 45 80% 60%;         /* Bright gold */
+  --primary-foreground: 270 60% 8%; /* Very dark purple for contrast */
+  
+  --secondary: 345 45% 15%;      /* Deep burgundy */
+  --secondary-foreground: 45 40% 90%;
+  
+  --muted: 270 30% 12%;
+  --muted-foreground: 45 20% 65%;
+  
+  --accent: 345 60% 30%;         /* Rich ruby red */
+  --accent-foreground: 45 80% 60%;
+  
+  --border: 45 40% 25%;          /* Dim antique gold */
+  --ring: 45 80% 60%;
+  
+  --card: 270 45% 8%;
+  --card-foreground: 45 40% 90%;
+}
+
+@layer base {
+  body {
+    @apply bg-background text-foreground antialiased font-serif selection:bg-primary/30 selection:text-primary;
+    min-height: 100vh;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    @apply font-semibold tracking-wide;
+  }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+/* ── Animated background mist drifts ── */
+@keyframes mistDrift1 {
+  0%, 100% { transform: translate(0px, 0px) scale(1); }
+  30%       { transform: translate(28px, -20px) scale(1.07); }
+  65%       { transform: translate(-18px, 16px) scale(0.95); }
+}
+@keyframes mistDrift2 {
+  0%, 100% { transform: translate(0px, 0px) scale(1); }
+  40%       { transform: translate(-24px, 30px) scale(1.09); }
+  75%       { transform: translate(20px, -14px) scale(0.94); }
+}
+@keyframes mistDrift3 {
+  0%, 100% { transform: translate(0px, 0px) scale(1); }
+  50%       { transform: translate(18px, 22px) scale(1.05); }
+}
+@keyframes mistDrift4 {
+  0%, 100% { transform: translate(0px, 0px) scale(1); }
+  45%       { transform: translate(-20px, -26px) scale(1.06); }
+}
+
+@keyframes pulse-gold {
+  0%, 100% {
+    box-shadow: 0 0 15px 0 rgba(212, 175, 55, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 25px 5px rgba(212, 175, 55, 0.5);
+  }
+}
+
+.glass-panel {
+  background: linear-gradient(135deg, rgba(30, 10, 45, 0.7) 0%, rgba(55, 10, 30, 0.6) 100%);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.7), inset 0 1px 0 0 rgba(212, 175, 55, 0.1);
+}
+
+.gold-glow {
+  box-shadow: 0 0 25px rgba(212, 175, 55, 0.25);
+}
+
+.gold-text-glow {
+  text-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
+}
+
+.gold-gradient-text {
+  background: linear-gradient(to bottom right, hsl(45 90% 70%), hsl(45 60% 40%));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Custom Scrollbar for the mystical feel */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: hsl(var(--background));
+}
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--border));
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--primary));
+}

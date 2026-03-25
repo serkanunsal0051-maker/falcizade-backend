@@ -1,0 +1,16 @@
+packages:
+  "framer-motion": "For mystical fluid animations and page transitions"
+  "lucide-react": "For icons"
+  "clsx": "For conditional class names"
+  "tailwind-merge": "For merging tailwind classes"
+
+images:
+  - path: "artifacts/fortune-teller/public/images/mystic-bg.png"
+    description: "Dark moody background, deep burgundy and midnight purple clouds with subtle golden stardust, abstract, mystical, Ottoman inspired"
+    aspect_ratio: "16:9"
+  - path: "artifacts/fortune-teller/public/images/ornate-border.png"
+    description: "Elegant golden Ottoman-style decorative border elements, transparent background, symmetrical, thin and delicate"
+    aspect_ratio: "16:9"
+
+notes:
+  - Custom useFortune hook needed for the multipart/form-data upload to /api/fal
