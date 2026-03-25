@@ -81,16 +81,43 @@ export async function hybridFortune(
   generateWithAI: () => Promise<Record<string, unknown>>,
   subtype?: string,
 ): Promise<HybridResult> {
-  const count = await incrementAndGetCount(userId, fortuneType);
+  try {
+    console.log("hybridFortune: Incrementing request count...");
+    const count = await incrementAndGetCount(userId, fortuneType);
+    console.log(`hybridFortune: User ${userId} request count: ${count}`);
 
-  if (shouldServeStored(count)) {
-    const stored = await getUnseenPoolFortune(userId, fortuneType, subtype);
-    if (stored) {
-      return { data: stored, source: "stored" };
+    if (shouldServeStored(count)) {
+      console.log("hybridFortune: Checking stored pool (every 3rd request)...");
+      try {
+        const stored = await getUnseenPoolFortune(userId, fortuneType, subtype);
+        if (stored) {
+          console.log("✅ hybridFortune: Serving from stored pool");
+          return { data: stored, source: "stored" };
+        }
+        console.log("hybridFortune: No stored fortune found, generating with AI...");
+      } catch (poolError) {
+        console.warn("hybridFortune: Failed to get stored fortune:", poolError);
+      }
+    } else {
+      console.log("hybridFortune: Not a pool request, generating fresh with AI...");
     }
-  }
 
-  const data = await generateWithAI();
-  await saveToPool(fortuneType, data, subtype);
-  return { data, source: "ai" };
+    console.log("hybridFortune: Calling AI generation function...");
+    const data = await generateWithAI();
+    console.log("hybridFortune: AI generation completed");
+
+    try {
+      console.log("hybridFortune: Saving to pool...");
+      await saveToPool(fortuneType, data, subtype);
+      console.log("✅ hybridFortune: Saved to pool");
+    } catch (saveError) {
+      console.warn("hybridFortune: Failed to save to pool:", saveError);
+      // Don't fail - saving to pool is optional
+    }
+
+    return { data, source: "ai" };
+  } catch (error) {
+    console.error("❌ hybridFortune: Fatal error:", error);
+    throw error;
+  }
 }

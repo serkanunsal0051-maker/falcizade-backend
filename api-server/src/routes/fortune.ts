@@ -64,29 +64,73 @@ router.post(
   "/fal",
   upload.single("image"),
   async (req: Request, res: Response) => {
+    console.log("=== /api/fal REQUEST RECEIVED ===");
+    console.log("REQUEST BODY:", {
+      userId: req.body.userId,
+      name: req.body.name,
+      gender: req.body.gender,
+      hasFile: !!req.file,
+      fileSize: req.file?.size,
+      fileMimeType: req.file?.mimetype,
+    });
+
     try {
+      // Validation
       if (!req.file) {
-        res.status(400).json({ error: "Lütfen bir kahve fincanı fotoğrafı yükleyin." });
-        return;
+        console.error("❌ No image file provided");
+        return res.status(400).json({ 
+          error: "Lütfen bir kahve fincanı fotoğrafı yükleyin.",
+          success: false
+        });
       }
 
+      // Extract parameters
       const userId = typeof req.body.userId === "string" ? req.body.userId.trim() : "anonymous";
       const name   = typeof req.body.name   === "string" ? req.body.name.trim()   : undefined;
       const gender = typeof req.body.gender === "string" ? req.body.gender.trim() : undefined;
 
+      console.log("Parsed parameters:", { userId, name, gender });
+
+      // Prepare image data
       const imageBuffer = req.file.buffer;
       const imageHash = hashImageBuffer(imageBuffer);
       const base64Image = imageBuffer.toString("base64");
       const mimeType = req.file.mimetype;
       const systemPrompt = buildSystemPrompt(name, gender);
 
-      const cached = await getCachedFortune(imageHash, "coffee");
-      if (cached) {
-        res.json(cached);
-        return;
+      console.log("Image hash:", imageHash);
+
+      // Check cache
+      console.log("Checking cache for image hash:", imageHash);
+      try {
+        const cached = await getCachedFortune(imageHash, "coffee");
+        if (cached) {
+          console.log("✅ Found cached fortune, returning...");
+          return res.json({
+            success: true,
+            source: "cache",
+            ...cached
+          });
+        }
+        console.log("No cached fortune found, generating with AI...");
+      } catch (cacheError) {
+        console.warn("Cache check failed:", cacheError);
+        // Continue with AI generation
       }
 
+      // Generate fortune using hybrid system
+      console.log("Starting hybridFortune...");
       const { data, source } = await hybridFortune(userId, "coffee", async () => {
+        console.log("🔄 Generating fortune with AI...");
+        
+        // Verify API key
+        const apiKey = process.env.AI_INTEGRATIONS_OPENAI_API_KEY || process.env.OPENAI_API_KEY;
+        if (!apiKey) {
+          throw new Error("OpenAI API key missing (set AI_INTEGRATIONS_OPENAI_API_KEY or OPENAI_API_KEY)");
+        }
+        console.log("✅ OpenAI API key found");
+
+        console.log("Sending request to OpenAI...");
         const response = await openai.chat.completions.create({
           model: "gpt-4o-mini",
           max_tokens: 350,
@@ -111,14 +155,34 @@ router.post(
           ],
         });
 
+        console.log("✅ OpenAI response received");
+        console.log("OpenAI response:", {
+          finishReason: response.choices[0]?.finish_reason,
+          promptTokens: response.usage?.prompt_tokens,
+          completionTokens: response.usage?.completion_tokens,
+        });
+
         const content = response.choices[0]?.message?.content;
-        if (!content) throw new Error("empty_response");
+        if (!content) {
+          throw new Error("OpenAI returned empty content");
+        }
+
+        console.log("Raw content length:", content.length);
 
         const jsonMatch = content.match(/\{[\s\S]*\}/);
-        const parsed = JSON.parse(jsonMatch ? jsonMatch[0] : content) as {
+        const jsonString = jsonMatch ? jsonMatch[0] : content;
+        
+        console.log("Attempting to parse JSON...");
+        const parsed = JSON.parse(jsonString) as {
           title: string;
           sections: { ask: string; para: string; yol: string; saglik: string; genel: string };
         };
+
+        console.log("✅ JSON parsed successfully");
+        console.log("Parsed fortune:", {
+          title: parsed.title,
+          sectionsCount: Object.keys(parsed.sections || {}).length,
+        });
 
         return {
           title: parsed.title || "Kahvenizin Sırrı",
@@ -126,14 +190,48 @@ router.post(
         };
       });
 
+      console.log("Fortune generated, source:", source);
+
+      // Store in cache if from AI
       if (source === "ai") {
-        await storeCachedFortune(imageHash, "coffee", data);
+        try {
+          console.log("Storing fortune in cache...");
+          await storeCachedFortune(imageHash, "coffee", data);
+          console.log("✅ Fortune cached successfully");
+        } catch (storeError) {
+          console.warn("Failed to store fortune in cache:", storeError);
+          // Don't fail the response, caching is optional
+        }
       }
 
-      res.json(data);
-    } catch (error) {
-      console.error("Fortune generation error:", error);
-      res.status(500).json({ error: "Yıldızlar şu an bulutlu. Lütfen tekrar deneyin." });
+      console.log("✅ /api/fal SUCCESS - Returning fortune");
+      return res.json({
+        success: true,
+        source,
+        ...data
+      });
+
+    } catch (error: any) {
+      console.error("❌ /api/fal FAILED");
+      console.error("Error type:", error?.constructor?.name);
+      console.error("Error message:", error?.message);
+      console.error("Error stack:", error?.stack);
+      if (error?.response) {
+        console.error("OpenAI response status:", error.response.status);
+        console.error("OpenAI response data:", error.response.data);
+      }
+
+      const errorMessage = error?.message || "Yıldızlar şu an bulutlu. Lütfen tekrar deneyin.";
+      const errorCode = error?.__typename === "APIError" ? (error as any).status : 500;
+
+      return res.status(errorCode || 500).json({
+        success: false,
+        error: errorMessage,
+        details: process.env.NODE_ENV === "development" ? {
+          type: error?.constructor?.name,
+          stack: error?.stack,
+        } : undefined
+      });
     }
   }
 );
